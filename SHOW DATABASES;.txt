@@ -1,0 +1,36 @@
+SHOW DATABASES;
+
+CREATE DATABASE hyderabad_university;
+
+USE hyderabad_university;
+CREATE TABLE hu_students (
+    full_name VARCHAR(100),
+    student_id VARCHAR(20) PRIMARY KEY,
+    department VARCHAR(100),
+    passing_year INT
+);
+
+INSERT INTO hu_students (full_name, student_id, department, passing_year) VALUES
+('Rahul Deshmukh', '22CSE1101', 'Computer Science', 2026),
+('Ishita Rao', '22ECE1102', 'Electronics and Communication', 2026),
+('Arvind Menon', '21MEC1103', 'Mechanical Engineering', 2025),
+('Tanya Kapoor', '20CSE1104', 'Computer Science', 2024);
+
+INSERT INTO hu_students (full_name, student_id, department, passing_year) VALUES
+('Varun Nair', '22EEE1105', 'Electrical Engineering', 2026),
+('Neha Sinha', '22CIV1106', 'Civil Engineering', 2026),
+('Kunal Verma', '21BBA1107', 'Business Administration', 2025),
+('Deepa Reddy', '23BIO1108', 'Biological Sciences', 2027),
+('Arjun Malik', '22LAW1109', 'Law', 2026);
+
+SELECT * FROM hu_students;
+
+ALTER TABLE hu_students ADD(phone VARCHAR(10));
+
+DESC hu_students;
+
+ALTER TABLE hu_students DROP COLUMN phone;
+
+ALTER TABLE hu_students ADD(nationality VARCHAR(10) DEFAULT 'India');
+
+UPDATE hu_students SET full_name='Nikita Ramesh' WHERE full_name='Kunal Verma';
