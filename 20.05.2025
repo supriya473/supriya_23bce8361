@@ -1,0 +1,89 @@
+CREATE DATABASE ShopDB;
+USE ShopDB;
+CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Email VARCHAR(100)
+);
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY,
+    OrderDate DATE,
+    CustomerID INT,
+    TotalAmount DECIMAL(10, 2),
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+INSERT INTO Customers VALUES (1, 'Alice', 'alice@example.com');
+INSERT INTO Customers VALUES (2, 'Bob', 'bob@example.com');
+INSERT INTO Orders VALUES (101, '2025-05-01', 1, 250.00);
+INSERT INTO Orders VALUES (102, '2025-05-02', 2, 400.00);
+select * from customers;
+select * from orders;
+UPDATE Customers
+SET Email = 'robert@example.com'
+WHERE CustomerID = 2;
+
+UPDATE Orders
+SET OrderDate = '2025-05-05'
+WHERE OrderID = 101;
+UPDATE Customers
+SET CustomerID = 10
+WHERE CustomerID = 1;
+DELETE FROM Customers
+WHERE CustomerID = 2;
+
+DROP TABLE IF EXISTS Orders;
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY,
+    OrderDate DATE,
+    CustomerID INT,
+    TotalAmount DECIMAL(10, 2),
+    FOREIGN KEY (CustomerID) 
+        REFERENCES Customers(CustomerID)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+INSERT INTO Orders VALUES (101, '2025-05-01', 1, 250.00);
+INSERT INTO Orders VALUES (102, '2025-05-02', 2, 400.00);
+UPDATE Customers
+SET CustomerID = 10
+WHERE CustomerID = 1;
+DELETE FROM Customers
+WHERE CustomerID = 2;
+CREATE DATABASE IF NOT EXISTS ShopbB;
+USE ShopbB;
+DROP TABLE IF EXISTS Orders;
+DROP TABLE IF EXISTS Customers;
+CREATE DATABASE IF NOT EXISTS SalesDB;
+USE SalesDB;
+DROP TABLE IF EXISTS Purchases;
+DROP TABLE IF EXISTS Clients;
+CREATE TABLE Clients (
+    ClientID INT NOT NULL PRIMARY KEY,
+    ClientName VARCHAR(100) NOT NULL,
+    ClientEmail VARCHAR(100) NOT NULL UNIQUE
+);
+CREATE TABLE Purchases (
+    PurchaseID INT NOT NULL PRIMARY KEY,
+    PurchaseDate DATE NOT NULL,
+    ClientID INT NOT NULL,
+    TotalAmount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (ClientID)
+        REFERENCES Clients(ClientID)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+INSERT INTO Clients VALUES (1, 'Alice', 'alice@example.com');
+INSERT INTO Clients VALUES (2, 'Bob', 'bob@example.com');
+
+INSERT INTO Purchases VALUES (101, '2025-05-01', 1, 250.00);
+INSERT INTO Purchases VALUES (102, '2025-05-02', 2, 400.00);
+ALTER TABLE Purchases
+ADD CONSTRAINT fk_client_id
+FOREIGN KEY (ClientID)
+REFERENCES Clients(ClientID)
+ON UPDATE CASCADE
+ON DELETE CASCADE;
+ALTER TABLE Purchases
+DROP FOREIGN KEY fk_client_id;
+ALTER TABLE Purchases
+ADD CONSTRAINT chk_total_amount CHECK (TotalAmount > 0);
