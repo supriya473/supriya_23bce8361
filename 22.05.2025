@@ -1,0 +1,103 @@
+USE vitap;
+
+SELECT * FROM Employee;
+
+SELECT COUNT(team)
+FROM Employee
+GROUP BY team
+ORDER BY COUNT(team) DESC
+LIMIT 1;
+
+
+SELECT SUM(income) 
+FROM Employee 
+GROUP BY team 
+ORDER BY SUM(income) 
+LIMIT 1;
+
+
+SELECT team, COUNT(team) 
+FROM Employee 
+GROUP BY team 
+HAVING COUNT(team) > 3;
+
+
+SELECT team, SUM(income)    
+FROM Employee
+GROUP BY team
+ORDER BY SUM(income) DESC
+LIMIT 1 OFFSET 1;
+
+
+SELECT team, SUM(income)    
+FROM Employee
+GROUP BY team
+ORDER BY SUM(income) DESC
+LIMIT 1 OFFSET 2;
+SELECT first_name, team 
+FROM Employee 
+WHERE income = (
+    SELECT MAX(income) 
+    FROM Employee
+);
+
+
+SELECT first_name, team 
+FROM Employee 
+WHERE income > (
+    SELECT AVG(income) 
+    FROM Employee
+);
+
+
+SELECT first_name, team 
+FROM Employee 
+WHERE income > (
+    SELECT MIN(income) 
+    FROM Employee
+);
+
+
+SELECT emp_id, full_name, team, income
+FROM Employee E1
+WHERE income > (
+    SELECT AVG(income)
+    FROM Employee E2
+    WHERE E2.team = E1.team
+);
+
+
+CREATE TABLE Learner (
+    learner_id INT PRIMARY KEY,
+    learner_name VARCHAR(100) NOT NULL
+);
+INSERT INTO Learner (learner_id, learner_name) VALUES
+(1, 'Rakesh'),
+(2, 'Anjali'),
+(3, 'Vikram');
+SELECT * FROM Learner;
+
+
+CREATE TABLE Course (
+    course_id INT PRIMARY KEY,
+    course_title VARCHAR(100)
+);
+create database students;
+use students;
+create table student(
+s_id int,
+s_name varchar(25)
+);
+insert into student values (101,'jayanth'),(102,'karthik'),(103,'Praveen'),(105,'mahesh'),(106,'Arun');
+create table address(
+s_id int,
+s_address varchar(25));
+insert into address values (101,'coimbatore'),(104,'chennai'),(105,'pune');
+select * from
+student cross join address;
+select * from
+student inner join address where student.s_id = address.s_id;
+select * from 
+student natural join address;
+select * from 
+student left outer join address on (student.s_id=address.s_id);
