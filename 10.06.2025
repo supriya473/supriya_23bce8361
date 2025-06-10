@@ -1,0 +1,116 @@
+package connection;
+
+import org.bson.Document;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+
+public class MongoDB {
+    public static void main(String[] args) {
+
+        // Connect to MongoDB server
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+
+        // Get the "vit" database
+        MongoDatabase database = mongoClient.getDatabase("vit");
+
+        // Access the "products" collection
+        MongoCollection<Document> collection = database.getCollection("products");
+
+        // Delete the document with _id = 1
+        collection.deleteOne(Filters.eq("_id", 1));
+
+        System.out.println("Document deleted.");
+
+        // Try to retrieve it to verify deletion
+        FindIterable<Document> documents = collection.find();
+        
+        for (Document document : documents) {
+            System.out.println(document.toJson());
+        }
+
+        // Close the connection
+        mongoClient.close();
+    }
+}
+
+package connection;
+
+import org.bson.Document;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.FindIterable;
+
+public class MongoDB {
+    public static void main(String[] args) {
+        // Connect to MongoDB server
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+
+        // Get the "operators" database
+        MongoDatabase database = mongoClient.getDatabase("operators");
+
+        // Access the "sales" collection
+        MongoCollection<Document> collection = database.getCollection("sales");
+
+        // Delete all documents where item is "Cappuccino"
+        collection.deleteMany(Filters.eq("item", "Cappuccino"));
+
+        System.out.println("All 'Cappuccino' items deleted.");
+
+        // Retrieve and print a subset of documents (skip 1, limit 2)
+        FindIterable<Document> allDocuments = collection.find().skip(1).limit(2);
+        for (Document doc : allDocuments) {
+            System.out.println(doc.toJson());
+        }
+
+        // Close the connection
+        mongoClient.close();
+    }
+}
+
+// necessary java imports 
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class SortAsc {
+
+    public static void main(String[] args) {
+
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        MongoDatabase database = mongoClient.getDatabase("vit");
+
+        // Get the collection
+        MongoCollection<Document> collection = database.getCollection("sales");
+
+        // Retrieve the documents and store them in a list
+        List<Document> documentList = new ArrayList<>();
+        for (Document doc : collection.find()) {
+            documentList.add(doc);
+        }
+
+        // Sort documents in descending order by pice
+
+        Collections.sort(documentList, (doc1, doc2) -> {
+            Double price1 = doc1.getDouble("price");
+            Double price2 = doc2.getDouble("price");
+            return price2.compareTo(price1); // Descending order
+          // for ascending order:  return price1.compareTo(price2); 
+
+        });
+
+        // Printing
+        for (Document doc : documentList) {
+            System.out.println("Sorted Document: " + doc);
+        }
+
+       
+    }
+}
